@@ -1,0 +1,262 @@
+https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000
+Nokia gitlab: https://gitlabe1.ext.net.nokia.com
+
+
+1. Commands:
+1.1. Diff
+	   1) git diff                                                      #check changes since last commit
+	   2) git diff  <file name>                                         #check changes since last commit
+	   3) git diff --staged                                             #Changes staged for commit
+	   4) git diff HEAD                                                 #Show both staged and unstaged changes
+	
+	
+1.2. log
+	   1) git log --pretty=oneline --name-status                         #Show log with file names in one line
+	   2) git log --pretty=oneline --abbrev-commit 	                     #show commit id
+	   3) git log <file_name>                                            #Show log for indicated file          	            
+	   4) git log -p <file_name>                                         #Show log and changed content for indicated file  	
+	   5) git log -n                                                     #Show last n commit log                           	
+	   6) git show <commit-id> --name-status                             #Show related files for on commit                 	
+	   7) git log --branches --not --remotes                             #List unpushed git commits                        	
+	   8) git log --since='FEB 1 2017' --until='FEB 14 2017'             #logs between date range
+	                             	
+	
+1.3. branch
+     
+     1) 查看
+        git branch                                      #查看所有本地分支，当前分支前面会标一个*号。
+	      git branch -r                                   #查看所有远程分支                                                  
+        git branch -a                                   #查看所有分支
+        
+	   2) 创建
+	      git branch <branch_name>                        #创建分支     
+	      git clone ssh://grlong@gerrite1.ext.net.nokia.com:8282/NeVe_TA_test   #clone创建 Neve_TA_test
+	      git clone ssh://grlong@gerrite1.ext.net.nokia.com:8282/NeVe_TA_RF     #clone创建NeVe_TA_RF
+	      
+	      
+	      
+     3) 切换
+        git checkout <branch_name>                      #切换分支	
+        
+     4) 创建并切换  
+        git checkout -b feature_x                       # 在本地创建并切换分支 -b参数表示创建并切换。
+        git checkout -b branch-name origin/branch-name  # 本地创建和远程分支对应的分支
+        git branch --track na16_8 origin/na16_8	        #Create local branch tracked with remote branch
+        
+	   5) 合并
+	      git merge <branch_name>                        #合并某分支到当前分支(需要先写切换到目的分支), 如果可能，Git会用Fast forward模式，但这种模式下，删除分支后，会丢掉分支信息。
+	      git merge --no-ff -m "merge with no-ff"        # merge时生成一个新的commit，这样，从分支历史上就可以看出分支信息
+	      git log --graph                                #查看分支的合并图
+	      git log --graph --pretty=oneline --abbrev-commit  
+	      
+	      
+	   6) 删除
+	      git branch -d <branch_name>                      #Delete local branch
+	      git branch -D <branch_name>                      #强行删除一个没有被合并过的分支
+	     
+	   7) bug分支：多分支的工作现场保留及恢复
+	      在某分支上，可以把工作现场的修改（完成但还没有提交）的东西git stash，在别的分支上处理bug分支，结束后，再git stash pop，回到工作现场。
+	      
+	      a:  git stash                                     #保留在某分支上的工作现场
+	      b: ...切换到别的分支上处理bug
+	      c: git checkout <原分支>                          #切回原分支
+	      d: 恢复
+	      d1: git stash apply                               #恢复后，stash内容并不删除。如需要删除，git stash drop来删除
+	      d2: git stash pop                                 #恢复的同时把stash内容也删了
+	      e:  git stash list                                 #查看stash list
+	     
+	     
+	     
+	    8) 解决冲突
+	       .首先，可以试图用git push origin branch-name推送自己的修改；
+         .如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并
+         .如果合并有冲突，则解决冲突，并在本地提交
+         .没有冲突或者解决掉冲突后，再用git push origin branch-name推送就能成功！
+
+
+
+	    
+	      git branch --track na16_8 origin/na16_8	       #Create local branch tracked with remote branch
+                                   
+	   5)  git push origin --delete <remote_branchname>   #Delete remote branch                                         
+	   6)  git diff <source_branch> <target_branch>       #Show difference between branchs                              
+	   8)  git branch --merged master                     #List all branches merged into master                         
+	   9)  git branch --merged master | grep -v '^\*' | xargs -n 1 git branch -d     #Remove branches merged with master
+     12) git branch --no-merged master                  #Check what has not been merged to "master"                   
+     
+
+1.4 remote repository
+     1) git remote -v                                   #查看当前所有远程仓库, 远程库的名字就是origin，这是Git默认的叫法
+     2) git remote add origin git@server-name:path/repo-name.git  #把一个已有的本地仓库与远程仓库关联
+     3) git clone git@github.com:michaelliao/gitskills.git .   #从远程克隆岛本地库
+     4) git push -u origin master                       #把本地库的内容推送到远程, 加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+     5）git push origin master
+     6）git pull                                        #从远程抓取分支到本地更新
+                              
+	
+1.5. Management and Operation
+1.5.1 添加、删除 file
+      1) git add  <file>                                    # add前，file必须在计算机上存在。 把修改的文件（或修改）从工作区添加到暂存区
+      2）delete file 
+        a. 直接在文件管理器中把文件删了，或者用rm命令删除   #删除工作区文件
+           恢复：git checkout -- text.txt 把版本库的东西重新写回工作区就行了
+        b. git rm <file>                                  #删除工作区和暂存区的文件， 相当于：rm <file> 和 git add <file>
+
+   
+1.5.2 Change operation
+	    1)
+	    2) git revert <commit-id>                              #Revert to given commit which is identified by commit-id.
+	    3) git fetch origin && git reset --hard origin/master  #Sync with remote, overwrite local changes     ???
+	    4) 
+	
+	
+1.5.3. 版本回退(after commit)
+       HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+       穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+       要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本。
+      1) git reset --hard <commit-id>                      #Revert to given version, which can be get by command "git reflog"                          
+      2) git reset --hard HEAD^                            #Revert to last version from current version (Current version can be get from "git log").   
+      3) git reset --hard HEAD^^                           #Revert to last second version                                                              
+      4) git reset --hard ORIG_HEAD                        #Revert pull   ????                                                                         
+
+
+1.5.4 Cancel modification
+      1) git checkout -- <file>                            #适用条件：文件已修改，未add到暂存区. 可以撤销修改
+      2) git reset HEAD <file>                             #适用条件：文件已修改，并add到暂存区, 但未commit。 可以把暂存区的staged修改为unstage。
+      3) 区别和联系   
+         文件已修改，未add到暂存区:
+         git checkout -- file可还原
+         
+         文件已修改，并add到暂存区未commit：
+         git read HEAD file
+         git checkout -- file可还原
+         等同于一条命令：
+         git reset --hard head
+      
+
+      
+1.5.4 Commit  # don't do in NetAct NeVe TA. must be reviewed by TA guy
+      1) git commit -m "add 3 files."          # commit with comment
+      
+      
+1.5.5	Checking
+      1) git status                                        # get the current status of versions
+      2) git Blame file_name	                             #check commit ID, author and date
+      3) git blame file_name | grep zz                     #git and grep work together
+      4) git reflog                                        #check each command
+
+
+1.6 tag
+    1)创建tag
+      . git tag <name>                                      #在某个分支下，创建tag，默认打在最新提交的commit上的
+      . git tag <name> <commit id>                          #给某一个commit 创建tag
+      . git tag -a <name> -m <tag descripton> <commit id>   #创建带有说明的标签，用-a指定标签名，-m指定说明文字
+      . git tag                                             #查看所有标签
+      . git show <tagname>                                  #查看特定标签信息         
+    2) 操作tag
+      . git tag -d <tag name>                               #删除本地tag
+      . git push origin --tags                              #一次性推送全部尚未推送到远程的本地标签
+      . git push origin :refs/tags/<tagname>                #删除一个远程标签
+
+
+
+
+
+2 basic knowledge in git
+2.1 HEAD
+   HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id
+2.2 工作区（Working Directory）和
+    1） 工作区（Working Directory）就是电脑里能看到的目录
+    2） 版本库（Repository)
+       . 工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库。
+       . Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。
+       . 把文件往Git版本库里添加
+         第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
+         第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+    3) 修改流程：
+       每次修改，如果不add到暂存区，那就不会加入到commit中。
+       第一次修改 -> git add ->。。。 第N次修改 -> git add  -> git commit
+2.3 远程repository
+2.4 分支
+    1） master分支是主分支，HEAD严格来说不是指向提交，而是指向master，master才是指向提交的，所以，HEAD指向的就是当前分支
+    2） master分支都会向前移动一步，这样，随着你不断提交，master分支的线也越来越长
+    3）创建新的分支，如dev时，Git新建了一个指针叫dev，指向master相同的提交，再把HEAD指向dev，就表示当前分支在dev上。 
+    4）在dev分支上，对工作区的修改和提交就是针对dev分支了，比如新提交一次后，dev指针往前移动一步，而master指针不变
+    5）把dev合并到master，就是直接把master指向dev的当前提交
+    6）合并完分支后，甚至可以删除dev分支。删除dev分支就是把dev指针给删掉，删掉后，我们就剩下了一条master分支
+    
+2.5 标签
+    .它就是指向某个commit的指针，创建和删除标签都是瞬间完成的。 
+    .tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起
+
+
+
+	
+git clone ssh://grlong@gerrite1.ext.net.nokia.com:8282/Neve_TA_test .
+git remote
+git review -s
+git remote
+git status
+git pull
+git show
+git checkout master
+git pull
+git status
+git add test_granite.txt
+git commit test_granite.txt test_granite.txt -m "add test_granite.txt"
+git push origin master
+
+
+
+Import git project in Eclipse
+0. ensure no project file(.project) in git repository. 
+1. In "PyDev Package Explorer"
+2. click "Import"
+3. select "Project from Git", and click "Next".
+4. select "Existing local repository", and click "Next".
+5. select git repository, and click "Next". 
+6. use default "Import as general project" and click "Next". 
+7. click "Finish". 
+
+
+
+
+
+
+
+
+Command line instructions
+Nokia: https://gitlabe1.ext.net.nokia.com
+
+
+
+Git global setup
+
+git config --global user.name "Long Granite"
+git config --global user.email "granite.long@nokia-sbell.com"
+
+Create a new repository
+
+git clone https://gitlabe1.ext.net.nokia.com/grlong/granitelearning.git
+cd granitelearning
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin master
+
+Existing folder
+
+cd existing_folder
+git init
+git remote add origin https://gitlabe1.ext.net.nokia.com/grlong/granitelearning.git
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+
+Existing Git repository
+
+cd existing_repo
+git remote rename origin old-origin
+git remote add origin https://gitlabe1.ext.net.nokia.com/grlong/granitelearning.git
+git push -u origin --all
+git push -u origin --tags
