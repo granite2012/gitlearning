@@ -93,38 +93,30 @@ Nokia gitlab: https://gitlabe1.ext.net.nokia.com
 1.4 remote repository
      1) git remote show origin                                    #查看远程分支
      2) git remote prune origin                                   #当远程分支被删除后，需要在本地运行此命令。否则，git branch -a仍然能看见删除的远程分支。      
-
      3) git remote -v                                             #查看远程仓库信息1, 远程库的名字就是origin，这是Git默认的叫法
         git remote -vv                                            #查看远程仓库信息2,本地分支是否与远程分支关联
        
      4) 本地与远程分支关联
-       a. git branch --set-upstream-to=origin/<remote branch name> <local branch name>  #设置本地分支与远程分支的关联(分支名相同），git push/pull不用写更多参数
-       b. git branch --set-upstream-to=origin/<remote branch name1> <local branch name2> #设置本地分支与远程分支的关联(分支名不同），git push/pull需要写更多参数
+       a. git branch --set-upstream-to=origin/<remote branch name> <local branch name>  #关联本地分支与远程分支的关联1(分支名相同），直接git push/pull
+          git checkout -b <local branch name> origin/<remote branch name>               #创建跟踪远程分支对应的本地分支1
+          git branch --track <local branch name> origin/<remote branch name>            #创建跟踪远程分支对应的本地分支2
+          
+          Note: 本地分支名和远程分支名可以同，也可以不同，如果不同，则git push/pull需要写更多参数。否则可以不带参数。
+          
         
      4) pull: 
         git pull                                                 #本地分支与远程关联后，无论分支名是否相同，都从远程抓取分支到本地更新
         git pull origin <remote branch name>                     #本地分支与远程没有关联时，从远程抓取分支到本地更新
         
-     5) push #本地、远程必须关联，才能push数据到远程
-        git push origin <local branch name>                       #关联远程分支，但分支名字不同（local：A， remote：B），推送到远程分支,并在远程建立相同的branch A。但此时A仍然与B关联。
-        git push origin HEAD:<remote branch name>                 #关联远程分支，但分支名字不同（local：A， remote：B），推送到远程分支B。
+     5) push #本地、远程必须关联，才能push数据到远程，否则push出错。
+        git push                                                 #关联远程分支，分支名相同。 推送当前分支到当前分支的追踪关系分支。
+        git push origin <local branch name>                      #关联远程分支，但分支名字不同（local：A， remote：B），推送到远程分支,并在远程建立相同的branch A。但此时A仍然与B关联。
+        git push origin HEAD:<remote branch name>                #关联远程分支，但分支名字不同（local：A， remote：B），推送到远程分支B。
+        git push origin [本地分支名1]:[远程分支名2]              #关联远程分支，但分支名字不同（local：A， remote：B），推送到远程分支B
               
-        #如果本地、远程分支未关联，且名字不同，push出错
+
         #如果本地、远程分支未关联，且名字相同，-u参数把本地branch的内容推送到远程, 还会把本地的分支和远程的分支关联起来(分支名称一致）
         git push -u origin <branch name>                          
-        
-     9） Git本地分支与远程分支的追踪关系
-         git branch -vv查看分支与远程分支追踪状态。 
-         git push origin [本地分支名]:[远程分支名]
-         直接写git push，是push当前分支到当前分支的追踪关系分支。 
-         
-         ???
-         设置本地分支master跟踪origin/<branch>远程分支：
-         git branch --set-upstream-to=origin/<branch> master
-         2) git remote add origin git@server-name:path/repo-name.git  #把一个已有的本地仓库与远程仓库关联
-         git checkout -b branch-name origin/branch-name      # 创建跟踪远程分支对应的本地分支, 1
-         git branch --track branch-name origin/branch-name	  # 创建跟踪远程分支对应的本地分支, 2
-        ???
 	
 1.5. Management and Operation
 1.5.1 添加、删除 file
