@@ -58,8 +58,8 @@ Nokia gitlab: https://gitlabe1.ext.net.nokia.com
 	      git branch -D <branch_name>                      #强行删除一个没有被合并过的分支
 	     
 	   7) bug分支：多分支的工作现场保留及恢复
+	      基于多分支的情况，trunk上可以看见branch上已经修改但未提交的分支内容。stash后，可以避免这个问题。
 	      在某分支上，可以把工作现场的修改（完成但还没有提交）的东西git stash，在别的分支上处理bug分支，结束后，再git stash pop，回到工作现场。
-	      
 	      a:  git stash                                     #保留在某分支上的工作现场
 	      b: ...切换到别的分支上处理bug
 	      c: git checkout <原分支>                          #切回原分支
@@ -97,12 +97,10 @@ Nokia gitlab: https://gitlabe1.ext.net.nokia.com
         git remote -vv                                            #查看远程仓库信息2,本地分支是否与远程分支关联
        
      4) 本地与远程分支关联
-       a. git branch --set-upstream-to=origin/<remote branch name> <local branch name>  #关联本地分支与远程分支的关联1(分支名相同），直接git push/pull
-          git checkout -b <local branch name> origin/<remote branch name>               #创建跟踪远程分支对应的本地分支1
-          git branch --track <local branch name> origin/<remote branch name>            #创建跟踪远程分支对应的本地分支2
-          
+       a. git checkout -b <local branch name> origin/<remote branch name>               #创建并跟踪远程分支对应的本地分支1
+          git branch --track <local branch name> origin/<remote branch name>            #创建并跟踪远程分支对应的本地分支2
           Note: 本地分支名和远程分支名可以同，也可以不同，如果不同，则git push/pull需要写更多参数。否则可以不带参数。
-          
+          git branch --set-upstream-to=origin/<remote branch name> <local branch name>  #关联本地分支与远程分支的关联1(分支名相同），直接git push/pull
         
      4) pull: 
         git pull                                                 #本地分支与远程关联后，无论分支名是否相同，都从远程抓取分支到本地更新
